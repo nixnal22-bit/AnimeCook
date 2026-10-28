@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171717">
+  <title>AnimeCook</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      background: #171717;
+      color: #f8f0e5;
+      font-family: system-ui, sans-serif;
+    }
+    header { color: #ffb45e; }
+    input, button {
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #555;
+      font-size: 16px;
+    }
+    input { width: 100%; margin: 12px 0; }
+    button {
+      background: #ffb45e;
+      color: #21170d;
+      cursor: pointer;
+    }
+    .card {
+      background: #262626;
+      border-radius: 16px;
+      padding: 16px;
+      margin: 14px 0;
+    }
+    .muted { color: #c7bdb2; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🍜 AnimeCook</h1>
+    <p>เมนูจากโลกอนิเมะ ทำกินได้ในครัวเรา</p>
+  </header>
+
+  <input id="search" placeholder="ค้นหาเมนูอาหาร...">
+
+  <main id="menu"></main>
+
+  <script>
+    const recipes = [
+      { name: "🍜 ราเมน", type: "Naruto-inspired",
+        ingredients: "เส้นราเมน น้ำซุป ไข่ ต้นหอม",
+        steps: "1. อุ่นน้ำซุป  2. ต้มเส้น  3. จัดใส่ชาม",
+        cost: 55 },
+      { name: "🍙 โอนิกิริ", type: "Japanese",
+        ingredients: "ข้าวญี่ปุ่น สาหร่าย เกลือ",
+        steps: "1. หุงข้าว  2. ปั้นเป็นสามเหลี่ยม  3. ห่อสาหร่าย",
+        cost: 20 },
+      { name: "🍛 ข้าวแกงกะหรี่", type: "Japanese",
+        ingredients: "ข้าว มันฝรั่ง แครอท หอมหัวใหญ่ ก้อนแกงกะหรี่",
+        steps: "1. หั่นผัก  2. ต้มจนสุก  3. ใส่แกงกะหรี่แล้วเสิร์ฟ",
+        cost: 45 },
+      { name: "🍳 ทามาโกะยากิ", type: "Japanese",
+        ingredients: "ไข่ไก่ น้ำตาล ซีอิ๊ว น้ำมัน",
+        steps: "1. ตีไข่  2. ทอดเป็นชั้นบาง ๆ  3. ม้วนแล้วหั่น",
+        cost: 25 },
+      { name: "🍚 กิวด้ง", type: "Japanese",
+        ingredients: "ข้าว เนื้อวัว หอมหัวใหญ่ ซีอิ๊ว",
+        steps: "1. ผัดหอมหัวใหญ่  2. ปรุงเนื้อให้สุก  3. เสิร์ฟบนข้าว",
+        cost: 60 },
+      { name: "🍳 โอมุไรซ์", type: "Japanese",
+        ingredients: "ข้าว ไข่ไก่ ซอสมะเขือเทศ ผัก",
+        steps: "1. ผัดข้าว  2. ทำไข่เจียว  3. ห่อข้าวด้วยไข่",
+        cost: 35 }
+    ];
+
+    const favorites = new Set();
+
+    function showRecipes() {
+      const q = document.getElementById("search").value.toLowerCase();
+      const menu = document.getElementById("menu");
+      menu.innerHTML = "";
+
+      recipes.filter(r =>
+        (r.name + r.type).toLowerCase().includes(q)
+      ).forEach((r, i) => {
+        const card = document.createElement("section");
+        card.className = "card";
+        card.innerHTML = `
+          <h2>${r.name}</h2>
+          <p class="muted">${r.type}</p>
+          <p><b>วัตถุดิบ:</b> ${r.ingredients}</p>
+          <p><b>วิธีทำ:</b> ${r.steps}</p>
+          <p>ต้นทุนประมาณ ${r.cost} บาท/เสิร์ฟ</p>
+          <button data-index="${i}">♡ บันทึกเมนูโปรด</button>
+        `;
+        card.querySelector("button").onclick = () => {
+          favorites.add(r.name);
+          card.querySelector("button").textContent = "♥ บันทึกแล้ว";
+        };
+        menu.appendChild(card);
+      });
+    }
+
+    document.getElementById("search")
+      .addEventListener("input", showRecipes);
+    showRecipes();
+  </script>
+</body>
+</html>
